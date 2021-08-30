@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Core
 {
@@ -9,20 +10,40 @@ namespace Core
         public BowlingGame()
         {
         }
+
+        public BowlingGame(string player1Symbols, string player2Symbols)
+        {
+            Players[0] = new Player(player1Symbols);
+            Players[1] = new Player(player2Symbols);
+        }
     }
 
     public class Player
     {
-        public Turn[] Turns = new Turn[11]; // 10 turns + bonus depending on spare or strike in 10th
+        public List<Turn> Turns = new List<Turn>();
 
-        public int Score
+        public int TotalScore
         {
-            get => 0;
+            get
+            {
+                int result = 0;
+
+                foreach (Turn turn in Turns)
+                {
+                    result += turn.Score;
+                }
+
+                return result;
+            }
         }
 
-        public Player()
+        public Player(string symbols)
         {
-
+            string[] split = symbols.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            foreach (string symbol in split)
+            {
+                Turns.Add(new Turn(symbol));
+            }
         }
     }
 
@@ -31,6 +52,11 @@ namespace Core
         // Pins knocked down in each (try)
         public int Try1 { get; set; } = 0;
         public int Try2 { get; set; } = 0;
+
+        public int Score
+        {
+            get => 0;
+        }
 
         public Turn()
         {
@@ -59,8 +85,9 @@ namespace Core
             }
             else if (symbol.Contains("/"))
             {
-                Try1 = int.Parse(symbol[0].ToString());
-                Try2 = int.Parse(symbol[2].ToString());
+                string[] parts = symbol.Split('/', StringSplitOptions.RemoveEmptyEntries);
+                Try1 = (parts.Length != 0) ? int.Parse(parts[0].ToString()) : 0;
+                Try2 = (parts.Length == 2) ? int.Parse(parts[1].ToString()) : 0;
             }
         }
     }
