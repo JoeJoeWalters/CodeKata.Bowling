@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Core
 {
@@ -28,10 +29,11 @@ namespace Core
             {
                 List<KeyValuePair<int, int>> pins = new List<KeyValuePair<int, int>>();
 
+                int position = 0;
                 for (int turnId = 0; turnId < Turns.Count; turnId ++)
                 {
                     Turn turn = Turns[turnId];
-                    int position = turnId + 1;
+                    position = turnId + 1;
 
                     if (turn.Scores[0] == 10)
                     {
@@ -50,20 +52,23 @@ namespace Core
                 }
 
                 int result = 0;
-
-                for (int position = 0; position < pins.Count; position++)
+                position = 0;
+                while (position < pins.Count)
                 {
                     int turnId = pins[position].Key;
                     int pinScore = pins[position].Value;
 
-                    result += pinScore;
-
                     // Last game?
                     if (turnId == 10)
                     {
+                        result += pins.Where(x => x.Key >= 10).Sum(x => x.Value);
+
+                        break;
                     }
-                    else
+                    else if (turnId < 10)
                     {
+                        result += pinScore;
+
                         // Strike? Add next two balls
                         if (pinScore == 10)
                         {
@@ -74,6 +79,8 @@ namespace Core
                                 result += pins[position + 2].Value;
                         }
                     }
+                    
+                    position++;
                 }
 
                 return result;

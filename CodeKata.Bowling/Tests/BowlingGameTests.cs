@@ -30,7 +30,7 @@ namespace Tests
 
         [Theory]
         [InlineData("", 0)]
-        [InlineData("X X X X X X X X X X", 300)]
+        [InlineData("X X X X X X X X X X X X", 300)]
         [InlineData("9- 9- 9- 9- 9- 9- 9- 9- 9- 9-", 90)]
         [InlineData("5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/5", 150)]
         public void ScoreText_To_Score(string symbols, int expectedScore)
