@@ -26,23 +26,26 @@ namespace Core
         {
             get
             {
-                List<int> pins = new List<int>();
+                List<KeyValuePair<int, int>> pins = new List<KeyValuePair<int, int>>();
 
-                foreach (Turn turn in Turns)
+                for (int turnId = 0; turnId < Turns.Count; turnId ++)
                 {
+                    Turn turn = Turns[turnId];
+                    int position = turnId + 1;
+
                     if (turn.Try1 == 10)
                     {
-                        pins.Add(turn.Try1);
+                        pins.Add(new KeyValuePair<int, int>(position, turn.Try1));
                     }
                     else
                     {
-                        pins.Add(turn.Try1);
-                        pins.Add(turn.Try2);
+                        pins.Add(new KeyValuePair<int, int>(position, turn.Try1));
+                        pins.Add(new KeyValuePair<int, int>(position, turn.Try2));
                     }
 
                     if (turn.Bonus != 0)
                     {
-                        pins.Add(turn.Bonus);
+                        pins.Add(new KeyValuePair<int, int>(position, turn.Bonus));
                     }
                 }
 
@@ -50,17 +53,26 @@ namespace Core
 
                 for (int position = 0; position < pins.Count; position++)
                 {
-                    int pinScore = pins[position];
+                    int turnId = pins[position].Key;
+                    int pinScore = pins[position].Value;
+
                     result += pinScore;
 
-                    // Strike? Add next two balls
-                    if (pinScore == 10)
+                    // Last game?
+                    if (turnId == 10)
                     {
-                        if (position < pins.Count - 1)
-                            result += pins[position + 1];
+                    }
+                    else
+                    {
+                        // Strike? Add next two balls
+                        if (pinScore == 10)
+                        {
+                            if (position < pins.Count - 1)
+                                result += pins[position + 1].Value;
 
-                        if (position < pins.Count - 2)
-                            result += pins[position + 2];
+                            if (position < pins.Count - 2)
+                                result += pins[position + 2].Value;
+                        }
                     }
                 }
 

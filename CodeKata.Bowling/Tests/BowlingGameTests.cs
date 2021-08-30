@@ -12,9 +12,9 @@ namespace Tests
         [InlineData("-10", 0, 10)]
         [InlineData("9-", 9, 0)]
         [InlineData("--", 0, 0)]
-        [InlineData("0/0", 0, 0)]
-        [InlineData("5/5", 5, 5)]
-        [InlineData("2/5", 2, 5)]
+        [InlineData("0/", 0, 10)]
+        [InlineData("5/", 5, 5)]
+        [InlineData("2/", 2, 8)]
         public void Symbol_To_Score_Checks(string symbol, int try1, int try2)
         {
             // ARRANGE
