@@ -33,19 +33,19 @@ namespace Core
                     Turn turn = Turns[turnId];
                     int position = turnId + 1;
 
-                    if (turn.Try1 == 10)
+                    if (turn.Scores[0] == 10)
                     {
-                        pins.Add(new KeyValuePair<int, int>(position, turn.Try1));
+                        pins.Add(new KeyValuePair<int, int>(position, turn.Scores[0]));
                     }
                     else
                     {
-                        pins.Add(new KeyValuePair<int, int>(position, turn.Try1));
-                        pins.Add(new KeyValuePair<int, int>(position, turn.Try2));
+                        pins.Add(new KeyValuePair<int, int>(position, turn.Scores[0]));
+                        pins.Add(new KeyValuePair<int, int>(position, turn.Scores[1]));
                     }
 
-                    if (turn.Bonus != 0)
+                    if (turn.Scores.Count > 2)
                     {
-                        pins.Add(new KeyValuePair<int, int>(position, turn.Bonus));
+                        pins.Add(new KeyValuePair<int, int>(position, turn.Scores[2]));
                     }
                 }
 
@@ -93,14 +93,7 @@ namespace Core
     public class Turn
     {
         // Pins knocked down in each (try)
-        public int Try1 { get; set; } = 0;
-        public int Try2 { get; set; } = 0;
-        public int Bonus { get; set; } = 0;
-
-        public bool Stike
-        {
-            get => (Try1 == 10);
-        }
+        public List<int> Scores = new List<int>();
 
         public Turn()
         {
@@ -112,28 +105,27 @@ namespace Core
             symbol = symbol.ToLower();
             if (symbol == "x")
             {
-                Try1 = 10;
-                Try2 = 0;
+                Scores.Add(10);
             }
             else if (symbol.EndsWith("-"))
             {
                 int.TryParse(symbol.Replace("-", ""), out int try1Check);
-                Try1 = try1Check;
-                Try2 = 0;
+                Scores.Add(try1Check);
+                Scores.Add(0);
             }
             else if (symbol.StartsWith("-"))
             {
-                Try1 = 0;
+                Scores.Add(0);
                 int.TryParse(symbol.Replace("-", ""), out int try2Check);
-                Try2 = try2Check;
+                Scores.Add(try2Check);
             }
             else if (symbol.Contains("/"))
             {
                 string[] parts = symbol.Split('/', StringSplitOptions.RemoveEmptyEntries);
-                Try1 = (parts.Length != 0) ? int.Parse(parts[0].ToString()) : 0;
-                Try2 = 10 - Try1;
+                Scores.Add((parts.Length != 0) ? int.Parse(parts[0].ToString()) : 0);
+                Scores.Add(10 - Scores[0]);
                 if (parts.Length == 2)
-                    Bonus = int.Parse(parts[1]);
+                    Scores.Add(int.Parse(parts[1]));
             }
         }
     }

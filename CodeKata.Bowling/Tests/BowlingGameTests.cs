@@ -23,8 +23,9 @@ namespace Tests
             // ACT
 
             // ASSERT
-            turn.Try1.Should().Be(try1);
-            turn.Try2.Should().Be(try2);
+            turn.Scores[0].Should().Be(try1);
+            if (turn.Scores.Count > 1)
+                turn.Scores[1].Should().Be(try2);
         }
 
         [Theory]
