@@ -125,8 +125,16 @@ namespace Core
             else if (symbol.StartsWith("-"))
             {
                 Scores.Add(0);
-                int.TryParse(symbol.Replace("-", ""), out int try2Check);
-                Scores.Add(try2Check);
+                string remainder = symbol.Replace("-", "");
+                if (remainder == "/")
+                {
+                    Scores.Add(10);
+                }
+                else
+                {
+                    int.TryParse(remainder, out int try2Check);
+                    Scores.Add(try2Check);
+                }
             }
             else if (symbol.Contains("/"))
             {
