@@ -26,11 +26,42 @@ namespace Core
         {
             get
             {
-                int result = 0;
+                List<int> pins = new List<int>();
 
                 foreach (Turn turn in Turns)
                 {
-                    result += turn.Score;
+                    if (turn.Try1 == 10)
+                    {
+                        pins.Add(turn.Try1);
+                    }
+                    else
+                    {
+                        pins.Add(turn.Try1);
+                        pins.Add(turn.Try2);
+                    }
+
+                    if (turn.Bonus != 0)
+                    {
+                        pins.Add(turn.Bonus);
+                    }
+                }
+
+                int result = 0;
+
+                for (int position = 0; position < pins.Count; position++)
+                {
+                    int pinScore = pins[position];
+                    result += pinScore;
+
+                    // Strike? Add next two balls
+                    if (pinScore == 10)
+                    {
+                        if (position < pins.Count - 1)
+                            result += pins[position + 1];
+
+                        if (position < pins.Count - 2)
+                            result += pins[position + 2];
+                    }
                 }
 
                 return result;
@@ -52,10 +83,11 @@ namespace Core
         // Pins knocked down in each (try)
         public int Try1 { get; set; } = 0;
         public int Try2 { get; set; } = 0;
+        public int Bonus { get; set; } = 0;
 
-        public int Score
+        public bool Stike
         {
-            get => 0;
+            get => (Try1 == 10);
         }
 
         public Turn()
@@ -87,7 +119,9 @@ namespace Core
             {
                 string[] parts = symbol.Split('/', StringSplitOptions.RemoveEmptyEntries);
                 Try1 = (parts.Length != 0) ? int.Parse(parts[0].ToString()) : 0;
-                Try2 = (parts.Length == 2) ? int.Parse(parts[1].ToString()) : 0;
+                Try2 = 10 - Try1;
+                if (parts.Length == 2)
+                    Bonus = int.Parse(parts[1]);
             }
         }
     }
