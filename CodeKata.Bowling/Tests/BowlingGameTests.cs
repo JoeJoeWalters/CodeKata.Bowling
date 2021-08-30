@@ -35,7 +35,7 @@ namespace Tests
         [InlineData("-- X X X X X X X X X X X", 270)] // No score on first frame, strikes on all remaining including 2x bonus throws at end
         [InlineData("9- 9- 9- 9- 9- 9- 9- 9- 9- 9-", 90)] // (20 rolls: 10 pairs of 9 and miss) = 10 frames * 9 points = 90
         [InlineData("5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/5", 150)] // (21 rolls: 10 pairs of 5 and spare, with a final 5) = 10 frames * 15 points = 150
-        [InlineData("-/ 5/", 15)]
+        [InlineData("-/ 5/", 20)]
         public void ScoreText_To_Score(string symbols, int expectedScore)
         {
             // ARRANGE

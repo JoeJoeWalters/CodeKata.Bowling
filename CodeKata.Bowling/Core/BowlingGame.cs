@@ -35,19 +35,13 @@ namespace Core
                     Frame Frame = Frames[frameId];
                     position = frameId + 1;
 
-                    if (Frame.Scores[0] == 10)
+                    if (Frame.Scores[0] >= 10)
                     {
                         pins.Add(new KeyValuePair<int, int>(position, Frame.Scores[0]));
                     }
                     else
                     {
-                        pins.Add(new KeyValuePair<int, int>(position, Frame.Scores[0]));
-                        pins.Add(new KeyValuePair<int, int>(position, Frame.Scores[1]));
-                    }
-
-                    if (Frame.Scores.Count > 2)
-                    {
-                        pins.Add(new KeyValuePair<int, int>(position, Frame.Scores[2]));
+                        pins.AddRange(Frame.Scores.Select(x => new KeyValuePair<int, int>(position, x)));
                     }
                 }
 
@@ -57,6 +51,10 @@ namespace Core
                 {
                     int frameId = pins[position].Key;
                     int pinScore = pins[position].Value;
+
+                    Boolean singleRoll = pins.Where(x => x.Key == frameId).Count() == 1;
+                    Boolean strike = (pinScore == 10) && singleRoll;
+                    //Boolean spare = !singleRoll && pins.Where(x => x.Key == frameId).Sum(x => x.Value) == 10;
 
                     // Last game?
                     if (frameId == 10)
@@ -71,8 +69,8 @@ namespace Core
                     {
                         result += pinScore;
 
-                        // Strike? Add next two balls
-                        if (pinScore == 10)
+                        // Strike (one score of 10 in the frame)? Not a -/ so add next two balls
+                        if (strike)
                         {
                             if (position < pins.Count - 1)
                                 result += pins[position + 1].Value;
@@ -80,6 +78,10 @@ namespace Core
                             if (position < pins.Count - 2)
                                 result += pins[position + 2].Value;
                         }
+                        /*else if (spare)
+                        {
+
+                        }*/
                     }
                     
                     position++;
