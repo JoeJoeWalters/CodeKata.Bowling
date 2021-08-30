@@ -36,6 +36,7 @@ namespace Tests
         [InlineData("9- 9- 9- 9- 9- 9- 9- 9- 9- 9-", 90)] // (20 rolls: 10 pairs of 9 and miss) = 10 frames * 9 points = 90
         [InlineData("5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/5", 150)] // (21 rolls: 10 pairs of 5 and spare, with a final 5) = 10 frames * 15 points = 150
         [InlineData("-/ 5/ -- -- -- -- -- -- -- --", 20)] // No pins then spare in first frame, 5 pins then spare in next frame then no score on remaining = 20
+        [InlineData("X -/ 5/ -- -- -- -- -- -- --", 40)] // Strike, so 10 + next 2 balls, next two balls are 0 and 10 so 20 + 0 + 10 + 5 + 5 = 40
         public void ScoreText_To_Score(string symbols, int expectedScore)
         {
             // ARRANGE
