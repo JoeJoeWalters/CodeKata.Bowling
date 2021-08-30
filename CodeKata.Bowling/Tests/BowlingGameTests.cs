@@ -6,6 +6,7 @@ namespace Tests
 {
     public class BowlingGameTests
     {
+
         [Fact]
         public void Example()
         {
