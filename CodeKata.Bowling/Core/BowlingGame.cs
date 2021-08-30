@@ -21,7 +21,7 @@ namespace Core
 
     public class Player
     {
-        public List<Turn> Turns = new List<Turn>();
+        public List<Frame> Frames = new List<Frame>();
 
         public int TotalScore
         {
@@ -30,24 +30,24 @@ namespace Core
                 List<KeyValuePair<int, int>> pins = new List<KeyValuePair<int, int>>();
 
                 int position = 0;
-                for (int turnId = 0; turnId < Turns.Count; turnId ++)
+                for (int frameId = 0; frameId < Frames.Count; frameId ++)
                 {
-                    Turn turn = Turns[turnId];
-                    position = turnId + 1;
+                    Frame Frame = Frames[frameId];
+                    position = frameId + 1;
 
-                    if (turn.Scores[0] == 10)
+                    if (Frame.Scores[0] == 10)
                     {
-                        pins.Add(new KeyValuePair<int, int>(position, turn.Scores[0]));
+                        pins.Add(new KeyValuePair<int, int>(position, Frame.Scores[0]));
                     }
                     else
                     {
-                        pins.Add(new KeyValuePair<int, int>(position, turn.Scores[0]));
-                        pins.Add(new KeyValuePair<int, int>(position, turn.Scores[1]));
+                        pins.Add(new KeyValuePair<int, int>(position, Frame.Scores[0]));
+                        pins.Add(new KeyValuePair<int, int>(position, Frame.Scores[1]));
                     }
 
-                    if (turn.Scores.Count > 2)
+                    if (Frame.Scores.Count > 2)
                     {
-                        pins.Add(new KeyValuePair<int, int>(position, turn.Scores[2]));
+                        pins.Add(new KeyValuePair<int, int>(position, Frame.Scores[2]));
                     }
                 }
 
@@ -55,17 +55,19 @@ namespace Core
                 position = 0;
                 while (position < pins.Count)
                 {
-                    int turnId = pins[position].Key;
+                    int frameId = pins[position].Key;
                     int pinScore = pins[position].Value;
 
                     // Last game?
-                    if (turnId == 10)
+                    if (frameId == 10)
                     {
+                        // Add the sum of all remaining throws (should be only up to 2 more)
                         result += pins.Where(x => x.Key >= 10).Sum(x => x.Value);
 
+                        // Must be finished
                         break;
                     }
-                    else if (turnId < 10)
+                    else if (frameId < 10)
                     {
                         result += pinScore;
 
@@ -92,22 +94,22 @@ namespace Core
             string[] split = symbols.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             foreach (string symbol in split)
             {
-                Turns.Add(new Turn(symbol));
+                Frames.Add(new Frame(symbol));
             }
         }
     }
 
-    public class Turn
+    public class Frame
     {
         // Pins knocked down in each (try)
         public List<int> Scores = new List<int>();
 
-        public Turn()
+        public Frame()
         {
 
         }
 
-        public Turn(string symbol)
+        public Frame(string symbol)
         {
             symbol = symbol.ToLower();
             if (symbol == "x")

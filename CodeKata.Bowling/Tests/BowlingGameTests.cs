@@ -18,14 +18,14 @@ namespace Tests
         public void Symbol_To_Score_Checks(string symbol, int try1, int try2)
         {
             // ARRANGE
-            var turn = new Turn(symbol);
+            var frame = new Frame(symbol);
 
             // ACT
 
             // ASSERT
-            turn.Scores[0].Should().Be(try1);
-            if (turn.Scores.Count > 1)
-                turn.Scores[1].Should().Be(try2);
+            frame.Scores[0].Should().Be(try1);
+            if (frame.Scores.Count > 1)
+                frame.Scores[1].Should().Be(try2);
         }
 
         [Theory]
