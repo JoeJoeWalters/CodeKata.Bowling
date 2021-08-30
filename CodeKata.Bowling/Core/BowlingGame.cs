@@ -36,5 +36,32 @@ namespace Core
         {
 
         }
+
+        public Turn(string symbol)
+        {
+            symbol = symbol.ToLower();
+            if (symbol == "x")
+            {
+                Try1 = 10;
+                Try2 = 0;
+            }
+            else if (symbol.EndsWith("-"))
+            {
+                int.TryParse(symbol.Replace("-", ""), out int try1Check);
+                Try1 = try1Check;
+                Try2 = 0;
+            }
+            else if (symbol.StartsWith("-"))
+            {
+                Try1 = 0;
+                int.TryParse(symbol.Replace("-", ""), out int try2Check);
+                Try2 = try2Check;
+            }
+            else if (symbol.Contains("/"))
+            {
+                Try1 = int.Parse(symbol[0].ToString());
+                Try2 = int.Parse(symbol[2].ToString());
+            }
+        }
     }
 }
